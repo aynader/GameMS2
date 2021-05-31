@@ -1,5 +1,8 @@
 package buildings;
 
+import exceptions.BuildingInCoolDownException;
+import exceptions.MaxLevelException;
+
 public abstract class Building {
 
 	private int cost;
@@ -42,6 +45,6 @@ public abstract class Building {
 		this.coolDown = inCooldown;
 	}
 
-	public void upgrade() throws BuildingInCoolDownException, MaxLevelException;
+	abstract public void upgrade() throws BuildingInCoolDownException, MaxLevelException;
 
 }
