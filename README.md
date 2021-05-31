@@ -8,4 +8,4 @@
 - All Attrbutes are private.
 -For example, always use the super method or constructor in subclasses when possible.
 
-# Good
+# Good Luck

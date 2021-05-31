@@ -42,4 +42,6 @@ public abstract class Building {
 		this.coolDown = inCooldown;
 	}
 
+	public void upgrade() throws BuildingInCoolDownException, MaxLevelException;
+
 }
