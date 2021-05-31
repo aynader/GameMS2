@@ -2,7 +2,6 @@ package buildings;
 
 import exceptions.BuildingInCoolDownException;
 import exceptions.MaxLevelException;
-import exceptions.MaxRecruitedException;
 
 public class ArcheryRange extends MilitaryBuilding {
 

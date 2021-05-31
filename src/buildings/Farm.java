@@ -20,4 +20,17 @@ public class Farm extends EconomicBuilding {
 		}
 	}
 
+	public int harvest() {
+		switch (getLevel()) {
+			case 1:
+				return 500; 
+			case 2:
+				return 700;
+			case 3:
+				return 1000;
+			default:
+				return 1000000; // cheat code you get 0 in ELCT ass
+		}
+	}
+
 }

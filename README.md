@@ -6,8 +6,8 @@
 
 - All methods are public.
 - All Attrbutes are private.
--For example, always use the super method or constructor in subclasses when possible.
-
+- For example, always use the super method or constructor in subclasses when possible.
+- how farm give gold why no food
 # Good Luck
 
 static void checkAge(int age) {
