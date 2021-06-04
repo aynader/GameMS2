@@ -1,7 +1,12 @@
 package buildings;
 
+import java.lang.System.Logger.Level;
+
 import exceptions.BuildingInCoolDownException;
 import exceptions.MaxLevelException;
+import exceptions.MaxRecruitedException;
+import units.Infantry;
+import units.Unit;
 
 public class Barracks extends MilitaryBuilding {
 
@@ -10,9 +15,8 @@ public class Barracks extends MilitaryBuilding {
 
 	}
 
-
 	public void upgrade() throws MaxLevelException, BuildingInCoolDownException {
-		
+
 		if (isCoolDown())
 			throw new BuildingInCoolDownException("Building is cooling down, wait for the next turn!");
 		if (getLevel() > 2)
@@ -24,4 +28,20 @@ public class Barracks extends MilitaryBuilding {
 		}
 	}
 
+	public Unit recruit() throws BuildingInCoolDownException, MaxRecruitedException {
+		Infantry inf;
+		switch (getLevel()) {
+			case 1:
+				inf = new Infantry(1, 50, 0.5, 0.6, 0.7);
+				return inf;
+			case 2:
+				inf = new Infantry(2, 50, 0.5, 0.6, 0.7);
+				return inf;
+			case 3:
+				inf = new Infantry(3, 60, 0.6, 0.7, 0.8);
+				return inf;
+			default:
+				return null;
+		}
+	}
 }
