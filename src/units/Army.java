@@ -2,8 +2,10 @@ package units;
 
 import java.util.ArrayList;
 
+import exceptions.MaxCapacityException;
+
 /**
- * @author mohammad.hussein
+ * @author amr.nader,omar shokheir, Mohamed abdelhady
  *
  */
 public class Army{
@@ -61,4 +63,18 @@ public class Army{
 		return maxToHold;
 	}
 	
+	public void relocateUnit(Unit unit) throws MaxCapacityException{
+		if(this.units.size() == 10) 
+			throw new MaxCapacityException();
+		else{
+			this.units.add(unit);
+			unit.getParentArmy().units.remove(unit);
+			unit.setParentArmy(this);
+		}	
+	}
+	public void handleAttackedUnit(Unit u){
+		u.getParentArmy().units.remove(u);
+		
+	}
+
 }

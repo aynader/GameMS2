@@ -16,19 +16,7 @@ public class app {
         // System.out.println(f.getLevel() + " " + f.getUpgradeCost());
 
 
-        Market m = new Market();
         
-        System.out.println(m.getLevel() + " " + m.getUpgradeCost());
-        m.upgrade();
-        m.setCoolDown(false);
-        System.out.println(m.getLevel() + " " + m.getUpgradeCost());
-        m.upgrade();
-        m.setCoolDown(false);
-        System.out.println(m.getLevel() + " " + m.getUpgradeCost());
-        m.upgrade();
-        m.setCoolDown(false);
-        System.out.println(m.getLevel() + " " + m.getUpgradeCost());
-
 
     }
 

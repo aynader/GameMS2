@@ -33,4 +33,5 @@ public class Market extends EconomicBuilding {
 				return 1000000; // cheat code you get 0 in ELCT ass
 		}
 	}
+
 }
