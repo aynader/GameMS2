@@ -18,7 +18,7 @@ public class City {
 		this.name = name;
 		economicalBuildings = new ArrayList<EconomicBuilding>();
 		militaryBuildings = new ArrayList<MilitaryBuilding>();
-		//defendingArmy = new Army(name);
+		defendingArmy = new Army(name);
 		turnsUnderSiege = -1;
 	}
 

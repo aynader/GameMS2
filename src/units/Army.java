@@ -85,7 +85,7 @@ public class Army {
 	}   
 	//           
 	public double foodNeeded(){
-		double food = 0;
+		double food = 0.0;
 		switch(getCurrentStatus()){
 			
 			case IDLE: 
