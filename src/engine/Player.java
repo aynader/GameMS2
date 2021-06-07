@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 import buildings.ArcheryRange;
 import buildings.Barracks;
+import buildings.Building;
 import buildings.Farm;
 import buildings.Market;
 import buildings.Stable;
 import exceptions.BuildingInCoolDownException;
+import exceptions.FriendlyCityException;
+import exceptions.MaxLevelException;
 import exceptions.MaxRecruitedException;
 import exceptions.NotEnoughGoldException;
+import exceptions.TargetNotReachedException;
 import units.Army;
+import units.Status;
 import units.Unit;
 
 public class Player {
@@ -118,7 +123,8 @@ public class Player {
 					market = true;
 			}
 		}
-		// this loop acts as a flag to check if this type of building has already been built
+		// this loop acts as a flag to check if this type of building has already been
+		// built
 		if (!c.getMilitaryBuildings().isEmpty()) {
 			for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
 				if (c.getMilitaryBuildings().get(i).getCost() == 2000)
@@ -131,35 +137,35 @@ public class Player {
 		}
 		switch (type) {
 			case "Market":
-				if (getTreasury() > 1500 && !market) {
+				if (getTreasury() >= 1500 && !market) {
 					Market m = new Market();
 					c.getEconomicalBuildings().add(m);
 					cost = 1500;
 					m.setCoolDown(true);
 				}
 			case "Farm":
-				if (getTreasury() > 1000 && !farm) {
+				if (getTreasury() >= 1000 && !farm) {
 					Farm f = new Farm();
 					c.getEconomicalBuildings().add(f);
 					cost = 1000;
 					f.setCoolDown(true);
 				}
 			case "Barracks":
-				if (getTreasury() > 2000 && !barracks){
+				if (getTreasury() >= 2000 && !barracks) {
 					Barracks br = new Barracks();
 					c.getMilitaryBuildings().add(br);
 					cost = 2000;
 					br.setCoolDown(true);
 				}
 			case "ArcheryRange":
-				if (getTreasury() > 1500 && !archery) {
+				if (getTreasury() >= 1500 && !archery) {
 					ArcheryRange a = new ArcheryRange();
 					c.getMilitaryBuildings().add(a);
 					cost = 1500;
 					a.setCoolDown(true);
 				}
 			case "Stable":
-				if (getTreasury() > 2500 && !stable) {
+				if (getTreasury() >= 2500 && !stable) {
 					Stable s = new Stable();
 					c.getMilitaryBuildings().add(s);
 					cost = 2500;
@@ -169,4 +175,25 @@ public class Player {
 		setTreasury(getTreasury() - cost);
 	}
 
+	public void upgradeBuilding(Building b)
+			throws NotEnoughGoldException, BuildingInCoolDownException, MaxLevelException {
+		if (getTreasury() >= b.getUpgradeCost()) {
+			b.upgrade();
+			setTreasury(getTreasury() - b.getUpgradeCost());
+		}
+	}
+
+	public void initiateArmy(City city, Unit unit) {
+		city.getDefendingArmy().getUnits().remove(unit);
+		Army a = new Army(city.getName());
+		a.getUnits().add(unit);
+		unit.setParentArmy(a);
+		getControlledArmies().add(a);
+	}
+
+	public void laySiege(Army army, City city) throws TargetNotReachedException, FriendlyCityException {
+		army.setCurrentStatus(Status.BESIEGING);
+		city.setUnderSiege(true);
+		city.setTurnsUnderSiege(city.getTurnsUnderSiege()++);
+	}
 }
