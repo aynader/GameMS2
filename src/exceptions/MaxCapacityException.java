@@ -8,7 +8,7 @@ public class MaxCapacityException extends ArmyException {
 	}
 
 	public MaxCapacityException(String s) {
-		super("Cant add this!");
+		super(s);
 
 	}
 
