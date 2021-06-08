@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.math.*;
 
 import buildings.Farm;
+import exceptions.FriendlyFireException;
 import units.Archer;
 import units.Army;
 import units.Cavalry;
@@ -196,19 +198,61 @@ public class Game {
 			for (int i = 0; i < player.getControlledArmies().size(); i++) {
 				for (int j = 0; j < player.getControlledArmies().get(i).getUnits().size(); j++) {
 					player.getControlledArmies().get(i).getUnits().get(j).setCurrentSoldierCount(
-						(int)(player.getControlledArmies().get(i).getUnits().get(j).getCurrentSoldierCount()* 0.9));
+							(int) (player.getControlledArmies().get(i).getUnits().get(j).getCurrentSoldierCount()
+									* 0.9));
 				}
 			}
 		}
 		for (int i = 0; i < getAvailableCities().size(); i++) {
 			if (getAvailableCities().get(i).isUnderSiege()) {
-				getAvailableCities().get(i).setTurnsUnderSiege(getAvailableCities().get(i).getTurnsUnderSiege()+1);
-				for(int j = 0; j < getAvailableCities().get(i).getDefendingArmy().getUnits().size();j++){
-					getAvailableCities().get(i).getDefendingArmy().getUnits().get(j).setCurrentSoldierCount(
-						(int)(getAvailableCities().get(i).getDefendingArmy().getUnits().get(j).getCurrentSoldierCount()*0.9)
-					);
+				getAvailableCities().get(i).setTurnsUnderSiege(getAvailableCities().get(i).getTurnsUnderSiege() + 1);
+				for (int j = 0; j < getAvailableCities().get(i).getDefendingArmy().getUnits().size(); j++) {
+					getAvailableCities().get(i).getDefendingArmy().getUnits().get(j)
+							.setCurrentSoldierCount((int) (getAvailableCities().get(i).getDefendingArmy().getUnits()
+									.get(j).getCurrentSoldierCount() * 0.9));
 				}
 			}
 		}
-	} // Method Ends.
+	}
+
+	public void occupy(Army a, String cityName) {
+
+		for (int i = 0; i < getAvailableCities().size(); i++) {
+			if (getAvailableCities().get(i).getName().equals(cityName)) {
+				getAvailableCities().get(i).setUnderSiege(false);
+				getAvailableCities().get(i).setTurnsUnderSiege(-1);
+				player.getControlledCities().add(getAvailableCities().get(i));
+				a = getAvailableCities().get(i).getDefendingArmy();
+			}
+		}
+	}
+
+	// MiniHelper™ Method 2021©.
+	public int getRandomNumber(int min, int max) {
+		return (int) ((Math.random() * (max - min)) + min);
+	}
+
+	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException {
+		boolean isAttacker = true;
+		while (!(attacker.getUnits().isEmpty() && defender.getUnits().isEmpty())) {
+			int unitAttacker = getRandomNumber(0, attacker.getUnits().size());
+			int unitDefender = getRandomNumber(0, defender.getUnits().size());
+			if (isAttacker) {
+				attacker.getUnits().get(unitAttacker).attack(defender.getUnits().get(unitDefender));
+			} else {
+				defender.getUnits().get(unitDefender).attack(attacker.getUnits().get(unitAttacker));
+			}
+			isAttacker = !isAttacker;
+		}
+		if (defender.getUnits().isEmpty()) {
+			occupy(attacker, attacker.getTarget());
+		}
+	}
+
+	public boolean isGameOver() {
+		if (player.getControlledCities().size() == getAvailableCities().size() || currentTurnCount > maxTurnCount)
+			return true;
+		return false;
+	}
+	// Java will actually tell you the game is over.
 }
