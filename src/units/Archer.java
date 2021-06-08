@@ -9,9 +9,7 @@ public class Archer extends Unit {
 	}
 
 	public void attack(Unit target) throws FriendlyFireException {
-		if (this.getParentArmy() == target.getParentArmy()) {
-			throw new FriendlyFireException("Sorry, You can't kill your own troops!");
-		}
+		super.attack(target);
 		double factor = 0.0;
 		switch (getLevel()) {
 			case 1:

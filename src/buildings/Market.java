@@ -10,15 +10,11 @@ public class Market extends EconomicBuilding {
 	}
 
 	public void upgrade() throws MaxLevelException, BuildingInCoolDownException {
-		if (isCoolDown())
-			throw new BuildingInCoolDownException("Building is cooling down, wait for the next turn!");
-		if (getLevel() > 2)
-			throw new MaxLevelException(
-					"And then Java suddenly said, I am sorry.... mamaaa miaaaaa thats not how you upgrade a building,... cheat code for level 4: levelMEEEE ");
-		else {
-			setLevel(getLevel() + 1);
-			setUpgradeCost(1000);
-		}
+		super.upgrade();
+		setLevel(getLevel() + 1);
+		setUpgradeCost(1000);
+		setCoolDown(true);
+		//System.out.println("Level: " + getLevel() + "Cool Down: " + isCoolDown() );
 	}
 
 	public int harvest() {
@@ -30,7 +26,7 @@ public class Market extends EconomicBuilding {
 			case 3:
 				return 2000;
 			default:
-				return 1000000; // cheat code you get 0 in ELCT ass
+				return 0;
 		}
 	}
 

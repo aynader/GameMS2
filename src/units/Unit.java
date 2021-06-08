@@ -58,7 +58,11 @@ public abstract class Unit {
 		return siegeUpkeep;
 	}
 
-	abstract public void attack(Unit target) throws FriendlyFireException;
+	public void attack(Unit target) throws FriendlyFireException{
+		if (this.getParentArmy() == target.getParentArmy()) {
+			throw new FriendlyFireException("Sorry, You can't kill your own troops!");
+		}
+	}
 }
 
 

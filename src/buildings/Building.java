@@ -45,6 +45,12 @@ public abstract class Building {
 		this.coolDown = inCooldown;
 	}
 
-	abstract public void upgrade() throws BuildingInCoolDownException, MaxLevelException;
+	public void upgrade() throws BuildingInCoolDownException, MaxLevelException{
+		setCoolDown(false);
+		if (isCoolDown())
+			throw new BuildingInCoolDownException("Building is cooling down, wait for the next turn!");
+		if (getLevel() > 2)
+			throw new MaxLevelException("You will try to upgrade the level and java will tell you ehhem Im sorry....");
+	}
 
 }

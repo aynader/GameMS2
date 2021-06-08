@@ -70,7 +70,7 @@ public class Army {
 	}
 
 	public void relocateUnit(Unit unit) throws MaxCapacityException {
-		if (this.units.size() == 10)
+		if (this.units.size() == maxToHold)
 			throw new MaxCapacityException("You have reached the maximum capacity!");
 		else {
 			this.units.add(unit);

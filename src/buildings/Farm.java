@@ -10,14 +10,11 @@ public class Farm extends EconomicBuilding {
 	}
 
 	public void upgrade() throws MaxLevelException, BuildingInCoolDownException {
-		if (isCoolDown())
-			throw new BuildingInCoolDownException("Building is cooling down, wait for the next turn!");
-		if (getLevel() > 2)
-			throw new MaxLevelException("You will try to upgrade the level and java will tell you ehhem Im sorry....");
-		else {
-			setLevel(getLevel() + 1);
-			setUpgradeCost(700);
-		}
+		super.upgrade();
+		setLevel(getLevel() + 1);
+		setUpgradeCost(700);
+		setCoolDown(true);
+		//System.out.println("Level: " + getLevel() + "Cool Down: " + isCoolDown() );
 	}
 
 	public int harvest() {
@@ -29,7 +26,7 @@ public class Farm extends EconomicBuilding {
 			case 3:
 				return 1000;
 			default:
-				return 1000000; // cheat code you get 0 in ELCT ass
+				return 0; 
 		}
 	}
 
