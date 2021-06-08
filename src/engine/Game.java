@@ -8,6 +8,7 @@ import units.Archer;
 import units.Army;
 import units.Cavalry;
 import units.Infantry;
+import units.Status;
 import units.Unit;
 
 public class Game {
@@ -59,7 +60,12 @@ public class Game {
 	}
 
 	public void loadArmy(String cityName, String path) throws IOException {
-
+		City ci = getAvailableCities().get(0);
+		for (int i = 0; i < getAvailableCities().size(); i++) {
+			if (getAvailableCities().get(i).getName().equals(cityName)) {
+				ci = getAvailableCities().get(i);
+			}
+		}
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		String currentLine = br.readLine();
 		Army resultArmy = new Army(cityName);
@@ -94,6 +100,7 @@ public class Game {
 				else
 					u = (new Cavalry(3, 60, 0.7, 0.8, 0.9));
 			}
+			u.setParentArmy(ci.getDefendingArmy());
 			resultArmy.getUnits().add(u);
 			currentLine = br.readLine();
 		}
@@ -130,6 +137,24 @@ public class Game {
 
 	public void setCurrentTurnCount(int currentTurnCount) {
 		this.currentTurnCount = currentTurnCount;
+	}
+
+	public void targetCity(Army army, String targetName) {
+		if (army.getCurrentStatus() != Status.MARCHING) {
+			army.setTarget(targetName);
+			for (int i = 0; i < getDistances().size(); i++) {
+				if (getDistances().get(i).getTo().equals(targetName)) {
+					if (getDistances().	get(i).getFrom().equals(army.getCurrentLocation())) {
+						army.setDistancetoTarget(getDistances().get(i).getDistance());
+						army.setCurrentStatus(Status.MARCHING);
+					}
+				}
+			}
+		}
+	}
+	
+	public void endTurn(){
+		
 	}
 
 }

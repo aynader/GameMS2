@@ -194,6 +194,6 @@ public class Player {
 	public void laySiege(Army army, City city) throws TargetNotReachedException, FriendlyCityException {
 		army.setCurrentStatus(Status.BESIEGING);
 		city.setUnderSiege(true);
-		city.setTurnsUnderSiege(city.getTurnsUnderSiege()++);
+		city.setTurnsUnderSiege(city.getTurnsUnderSiege() + 1);
 	}
 }
