@@ -67,36 +67,58 @@ public class Player {
 				c = getControlledCities().get(i);
 			}
 		}
+
 		Unit u = c.getMilitaryBuildings().get(0).recruit();
 		int cost = 0;
+		Building b = c.getMilitaryBuildings().get(0);
 		for (int i = 0; i < c.getMilitaryBuildings().size(); i++) {
 			switch (type) {
 				case "Archer":
 					if (c.getMilitaryBuildings().get(i) instanceof ArcheryRange) {
 						if (getTreasury() < c.getMilitaryBuildings().get(i).getRecruitmentCost()) {
-							u = c.getMilitaryBuildings().get(i).recruit();
-							cost = c.getMilitaryBuildings().get(i).getRecruitmentCost();
-							u.setParentArmy(c.getDefendingArmy());
-
+							throw new NotEnoughGoldException("Dude, go work for some cash YO");
 						}
+						if (c.getMilitaryBuildings().get(i).getCurrentRecruit() == c.getMilitaryBuildings().get(i)
+								.getMaxRecruit()) {
+							throw new MaxRecruitedException("Enough drafting youth people");
+						}
+						b = c.getMilitaryBuildings().get(i);
+						u = c.getMilitaryBuildings().get(i).recruit();
+						cost = c.getMilitaryBuildings().get(i).getRecruitmentCost();
+						u.setParentArmy(c.getDefendingArmy());
 					}
 				case "Cavalry":
 					if (c.getMilitaryBuildings().get(i) instanceof Stable) {
 						if (getTreasury() < c.getMilitaryBuildings().get(i).getRecruitmentCost()) {
-							u = c.getMilitaryBuildings().get(i).recruit();
-							cost = c.getMilitaryBuildings().get(i).getRecruitmentCost();
-							u.setParentArmy(c.getDefendingArmy());
+							throw new NotEnoughGoldException("Dude, go work for some cesh YO");
 						}
+						if (c.getMilitaryBuildings().get(i).getCurrentRecruit() == c.getMilitaryBuildings().get(i)
+								.getMaxRecruit()) {
+							throw new MaxRecruitedException("Enough drafting youth people");
+						}
+						b = c.getMilitaryBuildings().get(i);
+						u = c.getMilitaryBuildings().get(i).recruit();
+						cost = c.getMilitaryBuildings().get(i).getRecruitmentCost();
+						u.setParentArmy(c.getDefendingArmy());
 					}
 				case "Infantry":
 					if (c.getMilitaryBuildings().get(i) instanceof Barracks) {
 						if (getTreasury() < c.getMilitaryBuildings().get(i).getRecruitmentCost()) {
-							u = c.getMilitaryBuildings().get(i).recruit();
-							cost = c.getMilitaryBuildings().get(i).getRecruitmentCost();
-							u.setParentArmy(c.getDefendingArmy());
+							throw new NotEnoughGoldException("Dude, go work for some cesh YO");
 						}
+						if (c.getMilitaryBuildings().get(i).getCurrentRecruit() == c.getMilitaryBuildings().get(i)
+								.getMaxRecruit()) {
+							throw new MaxRecruitedException("Enough drafting youth people");
+						}
+						b = c.getMilitaryBuildings().get(i);
+						u = c.getMilitaryBuildings().get(i).recruit();
+						cost = c.getMilitaryBuildings().get(i).getRecruitmentCost();
+						u.setParentArmy(c.getDefendingArmy());
 					}
 			}
+		}
+		if (b.isCoolDown()) {
+			throw new BuildingInCoolDownException("Excuse moi, Nein, you cant build now!!");
 		}
 		c.getDefendingArmy().getUnits().add(u);
 		setTreasury(getTreasury() - cost);
@@ -137,46 +159,71 @@ public class Player {
 		}
 		switch (type) {
 			case "Market":
-				if (getTreasury() >= 1500 && !market) {
+				if (getTreasury() < 1500) {
+					throw new NotEnoughGoldException("money is a problem for you, ha?");
+				}
+				if (!market) {
 					Market m = new Market();
 					c.getEconomicalBuildings().add(m);
 					cost = 1500;
 					m.setCoolDown(true);
 				}
 			case "Farm":
-				if (getTreasury() >= 1000 && !farm) {
+				if (getTreasury() < 1000) {
+					throw new NotEnoughGoldException("money is a problem for you, ha?");
+				}
+				if (!farm) {
 					Farm f = new Farm();
 					c.getEconomicalBuildings().add(f);
 					cost = 1000;
 					f.setCoolDown(true);
 				}
 			case "Barracks":
-				if (getTreasury() >= 2000 && !barracks) {
+				if (getTreasury() < 2000) {
+					throw new NotEnoughGoldException("money is a problem for you, ha?");
+				}
+				if (!barracks) {
 					Barracks br = new Barracks();
 					c.getMilitaryBuildings().add(br);
 					cost = 2000;
 					br.setCoolDown(true);
 				}
 			case "ArcheryRange":
-				if (getTreasury() >= 1500 && !archery) {
+				if (getTreasury() < 1500) {
+					throw new NotEnoughGoldException("money is a problem for you, ha?");
+				}
+				if (!archery) {
 					ArcheryRange a = new ArcheryRange();
 					c.getMilitaryBuildings().add(a);
 					cost = 1500;
 					a.setCoolDown(true);
 				}
 			case "Stable":
-				if (getTreasury() >= 2500 && !stable) {
+				if (getTreasury() < 2500) {
+					throw new NotEnoughGoldException("money is a problem for you, ha?");
+				}
+				if (!stable) {
 					Stable s = new Stable();
 					c.getMilitaryBuildings().add(s);
 					cost = 2500;
 					s.setCoolDown(true);
 				}
 		}
+
 		setTreasury(getTreasury() - cost);
 	}
 
 	public void upgradeBuilding(Building b)
 			throws NotEnoughGoldException, BuildingInCoolDownException, MaxLevelException {
+		if( getTreasury() < b.getUpgradeCost()){
+			throw new NotEnoughGoldException("Cash money please!");
+		}
+		if(b.isCoolDown()){
+			throw new BuildingInCoolDownException("I am building a building please wait!");
+		}
+		if(b.getLevel() > 2){
+			throw new MaxLevelException("Reach the maxed level");
+		}
 		if (getTreasury() >= b.getUpgradeCost()) {
 			b.upgrade();
 			setTreasury(getTreasury() - b.getUpgradeCost());
@@ -192,6 +239,14 @@ public class Player {
 	}
 
 	public void laySiege(Army army, City city) throws TargetNotReachedException, FriendlyCityException {
+		if(army.getCurrentLocation() != city.getName()){
+			throw new TargetNotReachedException("You are so close yet so far away,havent reached the target yet!");
+		}
+		for(int i = 0 ; i < getControlledCities().size();i++){
+			if(getControlledCities().get(i).getName().equals(city.getName())){
+				throw new FriendlyCityException("Why are you punching yourself");
+			}
+		}
 		army.setCurrentStatus(Status.BESIEGING);
 		city.setUnderSiege(true);
 		city.setTurnsUnderSiege(city.getTurnsUnderSiege() + 1);

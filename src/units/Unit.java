@@ -59,7 +59,7 @@ public abstract class Unit {
 	}
 
 	public void attack(Unit target) throws FriendlyFireException{
-		if (this.getParentArmy() == target.getParentArmy()) {
+		if (this.getParentArmy().equals(target.getParentArmy())) {
 			throw new FriendlyFireException("Sorry, You can't kill your own troops!");
 		}
 	}

@@ -233,6 +233,9 @@ public class Game {
 	}
 
 	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException {
+		if(player.getControlledArmies().contains(defender)){
+			throw new FriendlyFireException("I am you, stupid");
+		}
 		boolean isAttacker = true;
 		while (!(attacker.getUnits().isEmpty() && defender.getUnits().isEmpty())) {
 			int unitAttacker = getRandomNumber(0, attacker.getUnits().size());

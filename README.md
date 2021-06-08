@@ -10,7 +10,7 @@
 - check exceptions
 
 # ^Hall Of Fame (OG)
-- Mohamed Saad --> H - 48 {Prolog Prodigy} [MIT] ( Saad's Numbers )
+- Mohamed Saad --> H - 48 {Prolog Prodigy} [MIT] ( Saad's Numbers ) S
 
 # Hall Of Fame
 Licencse under open source] - 7/6/2021

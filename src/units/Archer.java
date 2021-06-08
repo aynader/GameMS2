@@ -40,7 +40,7 @@ public class Archer extends Unit {
 		target.setCurrentSoldierCount((int) (target.getCurrentSoldierCount() - factor * getCurrentSoldierCount()));
 
 		if (target.getCurrentSoldierCount() <= 0) target.getParentArmy().handleAttackedUnit(target);
-			
+		
 	}
 
 }

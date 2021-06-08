@@ -9,13 +9,7 @@ public class app {
         // Farm f = new Farm();
         // f.setLevel(1);
         // f.upgrade();
-
-        Market m = new Market();
-        m.setLevel(1);
-        m.upgrade();
-        m.upgrade();
-        m.upgrade();
-            
+        
         };
     }
 
