@@ -80,31 +80,33 @@ public class Army {
 	}
 
 	public void handleAttackedUnit(Unit u) {
-		u.getParentArmy().units.remove(u);
-
+		if(u.getCurrentSoldierCount() <= 0) {
+			getUnits().remove(u);
+		}
 	}   
 	//           
 	public double foodNeeded(){
 		double food = 0.0;
 		switch(getCurrentStatus()){
-			
 			case IDLE: 
 					for (int i = 0 ; i<units.size(); i++){
 						food += units.get(i).getIdleUpkeep() * units.get(i).getCurrentSoldierCount();
 					}
+					break;
 			case MARCHING: 
 					for (int i = 0 ; i<units.size(); i++){
 						food += units.get(i).getMarchingUpkeep() * units.get(i).getCurrentSoldierCount();
-					}			
+					}
+					break;
 			case BESIEGING: 
 					for (int i = 0 ; i<units.size(); i++){
 						food += units.get(i).getSiegeUpkeep() * units.get(i).getCurrentSoldierCount();
 					}
-			default: food = 0.0;
-			return food;
-
+					break;
+			default:
+				break;
 		}
-
+		return food;
 	}
 
 }

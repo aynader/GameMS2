@@ -19,6 +19,7 @@ public class Archer extends Unit {
 					factor = 0.2;
 				else if (target instanceof Cavalry)
 					factor = 0.1;
+				break;
 			case 2:
 				if (target instanceof Archer)
 					factor = 0.4;
@@ -26,6 +27,7 @@ public class Archer extends Unit {
 					factor = 0.3;
 				else if (target instanceof Cavalry)
 					factor = 0.1;
+				break;
 			case 3:
 				if (target instanceof Archer)
 					factor = 0.5;
@@ -33,13 +35,17 @@ public class Archer extends Unit {
 					factor = 0.4;
 				else if (target instanceof Cavalry)
 					factor = 0.2;
+				break;
 			default:
 				break;
 		}
 
 		target.setCurrentSoldierCount((int) (target.getCurrentSoldierCount() - factor * getCurrentSoldierCount()));
 
-		if (target.getCurrentSoldierCount() <= 0) target.getParentArmy().handleAttackedUnit(target);
+		if (target.getCurrentSoldierCount() <= 0) {
+			target.setCurrentSoldierCount(0);
+			target.getParentArmy().handleAttackedUnit(target);
+		}
 		
 	}
 

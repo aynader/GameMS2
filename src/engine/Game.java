@@ -104,9 +104,9 @@ public class Game {
 				else
 					u = (new Cavalry(3, 60, 0.7, 0.8, 0.9));
 			}
-			u.setParentArmy(ci.getDefendingArmy());
 			resultArmy.getUnits().add(u);
 			currentLine = br.readLine();
+			u.setParentArmy(resultArmy);
 		}
 		br.close();
 		for (City c : availableCities) {
@@ -147,11 +147,18 @@ public class Game {
 		if (army.getCurrentStatus() != Status.MARCHING) {
 			army.setTarget(targetName);
 			for (int i = 0; i < getDistances().size(); i++) {
-				if (getDistances().get(i).getTo().equals(targetName)) {
-					if (getDistances().get(i).getFrom().equals(army.getCurrentLocation())) {
-						army.setDistancetoTarget(getDistances().get(i).getDistance());
-						army.setCurrentStatus(Status.MARCHING);
-					}
+				if (
+						(getDistances().get(i).getTo().equals(targetName) &&  
+						getDistances().get(i).getFrom().equals(army.getCurrentLocation()))
+						||
+						(getDistances().get(i).getFrom().equals(targetName) &&
+								getDistances().get(i).getTo().equals(army.getCurrentLocation())
+								)
+						
+						
+						) {
+					army.setDistancetoTarget(getDistances().get(i).getDistance());
+					army.setCurrentStatus(Status.MARCHING);
 				}
 			}
 		}
@@ -177,19 +184,16 @@ public class Game {
 			}
 		}
 		double sumFood = 0.0;
-		for (int i = 0; i < player.getControlledArmies().size(); i++) {
-			sumFood += player.getControlledArmies().get(i).foodNeeded();
-			if (player.getControlledArmies().get(i).getCurrentStatus().equals(Status.MARCHING)) {
-				Army a = player.getControlledArmies().get(i);
-				a.setDistancetoTarget(a.getDistancetoTarget() - 1);
-				if (a.getDistancetoTarget() == 0) {
-					// We should recheck this part after resolve()
-					a.setCurrentStatus(Status.BESIEGING);
-					a.setCurrentLocation(a.getTarget());
-					for (int j = 0; j < getAvailableCities().size(); j++) {
-						if (getAvailableCities().get(j).getName().equals(a.getTarget())) {
-							getAvailableCities().get(j).setUnderSiege(true);
-						}
+		if(!player.getControlledArmies().isEmpty()) {
+			for (int i = 0; i < player.getControlledArmies().size(); i++) {
+				sumFood += player.getControlledArmies().get(i).foodNeeded();
+				if (player.getControlledArmies().get(i).getCurrentStatus().equals(Status.MARCHING)) {
+					Army a = player.getControlledArmies().get(i);
+					a.setDistancetoTarget(a.getDistancetoTarget() - 1);
+					if (a.getDistancetoTarget() == 0) {
+						a.setCurrentStatus(Status.IDLE);
+						a.setCurrentLocation(a.getTarget());
+						a.setTarget("");
 					}
 				}
 			}
@@ -202,6 +206,10 @@ public class Game {
 									* 0.9));
 				}
 			}
+			player.setFood(0);
+		}
+		else {
+			player.setFood(player.getFood() - sumFood);
 		}
 		for (int i = 0; i < getAvailableCities().size(); i++) {
 			if (getAvailableCities().get(i).isUnderSiege()) {
@@ -214,6 +222,31 @@ public class Game {
 			}
 		}
 	}
+	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException {
+		if(player.getControlledArmies().contains(defender)){
+			throw new FriendlyFireException("I am you, stupid");
+		}
+		
+		boolean isAttacker = true;
+		while (!(attacker.getUnits().isEmpty() || defender.getUnits().isEmpty())) {
+			
+			double attackerSize = attacker.getUnits().size()*Math.random();
+			double defenderSize = defender.getUnits().size()*Math.random();
+			int unitAttacker = (int)attackerSize;
+			int unitDefender = (int)defenderSize;
+			if (isAttacker) {
+				attacker.getUnits().get(unitAttacker).attack(defender.getUnits().get(unitDefender));
+			} else {
+				defender.getUnits().get(unitDefender).attack(attacker.getUnits().get(unitAttacker));
+			}
+			isAttacker = !isAttacker;
+			
+		}
+		
+		if (defender.getUnits().isEmpty()) {
+			occupy(attacker, attacker.getTarget());
+		}
+	}
 
 	public void occupy(Army a, String cityName) {
 
@@ -222,40 +255,16 @@ public class Game {
 				getAvailableCities().get(i).setUnderSiege(false);
 				getAvailableCities().get(i).setTurnsUnderSiege(-1);
 				player.getControlledCities().add(getAvailableCities().get(i));
-				a = getAvailableCities().get(i).getDefendingArmy();
+				getAvailableCities().get(i).setDefendingArmy(a);
 			}
 		}
 	}
-
-	// MiniHelper™ Method 2021©.
-	public int getRandomNumber(int min, int max) {
-		return (int) ((Math.random() * (max - min)) + min);
-	}
-
-	public void autoResolve(Army attacker, Army defender) throws FriendlyFireException {
-		if(player.getControlledArmies().contains(defender)){
-			throw new FriendlyFireException("I am you, stupid");
-		}
-		boolean isAttacker = true;
-		while (!(attacker.getUnits().isEmpty() && defender.getUnits().isEmpty())) {
-			int unitAttacker = getRandomNumber(0, attacker.getUnits().size());
-			int unitDefender = getRandomNumber(0, defender.getUnits().size());
-			if (isAttacker) {
-				attacker.getUnits().get(unitAttacker).attack(defender.getUnits().get(unitDefender));
-			} else {
-				defender.getUnits().get(unitDefender).attack(attacker.getUnits().get(unitAttacker));
-			}
-			isAttacker = !isAttacker;
-		}
-		if (defender.getUnits().isEmpty()) {
-			occupy(attacker, attacker.getTarget());
-		}
-	}
+	
+	
 
 	public boolean isGameOver() {
 		if (player.getControlledCities().size() == getAvailableCities().size() || currentTurnCount > maxTurnCount)
 			return true;
 		return false;
 	}
-	// Java will actually tell you the game is over.
 }

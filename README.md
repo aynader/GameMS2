@@ -11,15 +11,22 @@
 
 # ^Hall Of Fame (OG)
 - Mohamed Saad --> H - 48 {Prolog Prodigy} [MIT] ( Saad's Numbers ) S
+               --> ||ing 
 
 # Hall Of Fame
 Licencse under open source] - 7/6/2021
 - Amr Youssef  --> super() - [A. Nader , Journal of Habd Science, Vol, 1, 8/6/2021] [Amr's series]
+               --> Advising supervisor of refactoring
+               --> Phd. in Archer methods finding.
+               --> achiever star*2
 - Can write for loop in 1 second.
 - contact@aynader.xyz
 
 # Hall Of Fame - Maldives
 - Omar Wael    --> if...else [6 May 2021, 11:51 PM] ( LaOmar Transform )
+               --> inclass 
+               --> refactoring+*
+               --> return boolean
 - Trophies: 5 WC , 42 League, 31 Cup, 9 CAFCL.
 
 # Hall Of Fame (Math)

@@ -32,13 +32,13 @@ public class Stable extends MilitaryBuilding {
 			Cavalry cav;
 			switch (getLevel()) {
 				case 1:
-					cav = new Cavalry(1, 50, 0.5, 0.6, 0.7);
+					cav = new Cavalry(1, 40, 0.6, 0.7, 0.75);
 					return cav;
 				case 2:
-					cav = new Cavalry(2, 50, 0.5, 0.6, 0.7);
+					cav = new Cavalry(2, 40, 0.6, 0.7, 0.75);
 					return cav;
 				case 3:
-					cav = new Cavalry(3, 60, 0.6, 0.7, 0.8);
+					cav = new Cavalry(3, 60, 0.7, 0.8, 0.9);
 					return cav;
 				default:
 					return null;

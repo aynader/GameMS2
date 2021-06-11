@@ -14,7 +14,6 @@ public class ArcheryRange extends MilitaryBuilding {
 	}
 
 	public void upgrade() throws MaxLevelException, BuildingInCoolDownException {
-		// if(chat.getInput == "Mohamed salah")
 		super.upgrade();
 		setLevel(getLevel() + 1);
 		setUpgradeCost(700);
