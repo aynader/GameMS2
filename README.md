@@ -10,8 +10,9 @@
 - check exceptions
 
 # ^Hall Of Fame (OG)
-- Mohamed Saad --> H - 48 {Prolog Prodigy} [MIT] ( Saad's Numbers ) S
-               --> ||ing 
+- Mohamed Saad --> H - 48 {Prolog Prodigy} [MIT] ( Saad's Numbers ) 
+               --> ||ing
+               --> getLengthFromTag
 
 # Hall Of Fame
 Licencse under open source] - 7/6/2021
@@ -27,6 +28,7 @@ Licencse under open source] - 7/6/2021
                --> inclass 
                --> refactoring+*
                --> return boolean
+               --> Mr. Constraint Programming (!.)
 - Trophies: 5 WC , 42 League, 31 Cup, 9 CAFCL.
 
 # Hall Of Fame (Math)
