@@ -45,7 +45,7 @@ import units.Status;
 import units.Unit;
 
 @SuppressWarnings({ "rawtypes", "unchecked","unused" })
-public class M2PublicTests_35504 {
+public class M2PublicTests {
 	String armyPath = "units.Army";
 	String unitPath = "units.Unit";
 	String archerPath = "units.Archer";

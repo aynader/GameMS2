@@ -4,26 +4,33 @@ import java.util.ArrayList;
 
 import exceptions.MaxCapacityException;
 
-/**
- * @author amr.nader,omar shokheir, Mohamed abdelhady
- *
- */
-public class Army {
+
+public class Army{
 	private Status currentStatus;
 	private ArrayList<Unit> units;
 	private int distancetoTarget;
 	private String target;
 	private String currentLocation;
-	@SuppressWarnings("unused")
-	private final int maxToHold = 10;
+	private final int maxToHold=10;
 
 	public Army(String currentLocation) {
-		this.currentLocation = currentLocation;
-		currentStatus = Status.IDLE;
-		units = new ArrayList<Unit>();
-		distancetoTarget = -1;
-		target = "";
+		this.currentLocation=currentLocation;
+		currentStatus=Status.IDLE;
+		units=new ArrayList<Unit>();
+		distancetoTarget=-1;
+		target="";
+		
 	}
+	public void relocateUnit(Unit unit) throws MaxCapacityException
+	{
+		if(units.size()==maxToHold)
+			throw new MaxCapacityException("Maximum capacity reached");
+		units.add(unit);
+		unit.getParentArmy().units.remove(unit);
+		unit.setParentArmy(this);
+	}
+	
+	
 
 	public Status getCurrentStatus() {
 		return currentStatus;
@@ -48,65 +55,46 @@ public class Army {
 	public void setDistancetoTarget(int distancetoTarget) {
 		this.distancetoTarget = distancetoTarget;
 	}
-
 	public String getTarget() {
 		return target;
 	}
-
 	public void setTarget(String target) {
 		this.target = target;
 	}
-
 	public String getCurrentLocation() {
 		return currentLocation;
 	}
-
 	public void setCurrentLocation(String currentLocation) {
 		this.currentLocation = currentLocation;
 	}
-
+	
 	public int getMaxToHold() {
 		return maxToHold;
 	}
-
-	public void relocateUnit(Unit unit) throws MaxCapacityException {
-		if (this.units.size() == maxToHold)
-			throw new MaxCapacityException("You have reached the maximum capacity!");
-		else {
-			this.units.add(unit);
-			unit.getParentArmy().units.remove(unit);
-			unit.setParentArmy(this);
+	public double foodNeeded()
+	{
+		double sum=0;
+		for(Unit u: units)
+		{
+			if(currentStatus==Status.IDLE)
+				sum+=(u.getIdleUpkeep()*u.getCurrentSoldierCount());
+			else if(currentStatus==Status.MARCHING)
+				sum+=(u.getMarchingUpkeep()*u.getCurrentSoldierCount());
+			else 
+				sum+=(u.getSiegeUpkeep()*u.getCurrentSoldierCount());
+			
 		}
+		return sum;
+		
 	}
-
 	public void handleAttackedUnit(Unit u) {
-		if(u.getCurrentSoldierCount() <= 0) {
-			getUnits().remove(u);
+		if(u.getCurrentSoldierCount()<=0)
+		{
+			u.setCurrentSoldierCount(0);
+		units.remove(u);
 		}
-	}   
-	//           
-	public double foodNeeded(){
-		double food = 0.0;
-		switch(getCurrentStatus()){
-			case IDLE: 
-					for (int i = 0 ; i<units.size(); i++){
-						food += units.get(i).getIdleUpkeep() * units.get(i).getCurrentSoldierCount();
-					}
-					break;
-			case MARCHING: 
-					for (int i = 0 ; i<units.size(); i++){
-						food += units.get(i).getMarchingUpkeep() * units.get(i).getCurrentSoldierCount();
-					}
-					break;
-			case BESIEGING: 
-					for (int i = 0 ; i<units.size(); i++){
-						food += units.get(i).getSiegeUpkeep() * units.get(i).getCurrentSoldierCount();
-					}
-					break;
-			default:
-				break;
-		}
-		return food;
+		
 	}
+	
 
 }

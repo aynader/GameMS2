@@ -9,41 +9,43 @@ import units.Unit;
 public class ArcheryRange extends MilitaryBuilding {
 
 	public ArcheryRange() {
-		super(1500, 800, 400);
-
-	}
-
-	public void upgrade() throws MaxLevelException, BuildingInCoolDownException {
-		super.upgrade();
-		setLevel(getLevel() + 1);
-		setUpgradeCost(700);
-		setRecruitmentCost(getRecruitmentCost() + 50);
-		setCoolDown(true);
+		super(1500, 800,400);
 		
 	}
-	////////////////////////
 
+	@Override
 	public Unit recruit() throws BuildingInCoolDownException, MaxRecruitedException {
-		if (isCoolDown())
-			throw new BuildingInCoolDownException("Building is cooling down, wait for the next turn!");
-		if (getMaxRecruit() == getCurrentRecruit())
-			throw new MaxRecruitedException("Sorry, No more units can be added!");
-		else {
-			setCurrentRecruit(getCurrentRecruit() + 1);
-			Archer arch;
-			switch (getLevel()) {
-				case 1:
-					arch = new Archer(1, 60, 0.4, 0.5, 0.6);
-					return arch;
-				case 2:
-					arch = new Archer(2, 60, 0.4, 0.5, 0.6);
-					return arch;
-				case 3:
-					arch = new Archer(3, 70, 0.5, 0.6, 0.7);
-					return arch;
-				default:
-					return null;
-			}
-		}
+		if(isCoolDown())
+			throw new BuildingInCoolDownException("Building is cooling down, please wait for the next turn");
+		if(getCurrentRecruit()==getMaxRecruit())
+			throw new MaxRecruitedException("Max recruited units reached, please wait till next turn. ");
+		setCurrentRecruit(getCurrentRecruit()+1);
+		if(getLevel()==1)
+			return new Archer(1, 60, 0.4, 0.5, 0.6);
+		
+	else if(getLevel()==2)
+		return new Archer(2,60,0.4,0.5,0.6);
+	else
+		return new Archer(3,70,0.5,0.6,0.7);
+		
 	}
+
+	@Override
+	public void upgrade() throws BuildingInCoolDownException, MaxLevelException {
+		super.upgrade();
+		if(getLevel()==1)
+		{
+			setLevel(2);
+			setUpgradeCost(700);
+			setRecruitmentCost(450);
+		}
+		else if(getLevel()==2)
+		{
+		setLevel(3);
+		setRecruitmentCost(500);
+		}
+		
+	}
+
+
 }
